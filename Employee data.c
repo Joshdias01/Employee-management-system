@@ -81,7 +81,7 @@ void modify_employee()
     {
         if (current_employee->id == id)
         {
-            printf("Enter new name (leave blank to keep '%s'): ", current_employee->name);
+            printf("Enter new name (type %s to keep the same): ", current_employee->name);
             char new_name[50];
             getchar();
             scanf("%[^\n]s",new_name);
@@ -90,23 +90,20 @@ void modify_employee()
             {
                 strcpy(current_employee->name, new_name);
             }
-            printf("Enter new age (leave blank to keep '%d'): ", current_employee->age);
-            char new_age_str[10];
-            getchar();
-            scanf("%[^\n]s",new_age_str);
-            if (strlen(new_age_str) > 0)
-            {
-                current_employee->age = atoi(new_age_str);
-            }
-            printf("Enter new salary (leave blank to keep '%.2f'): ", current_employee->salary);
-            char new_salary_str[20];
-            getchar();
-            scanf("%[^\n]s",new_salary_str);
-            if (strlen(new_salary_str) > 0)
-            {
-                current_employee->salary = atof(new_salary_str);
-            }
-            printf("Enter new job title (leave blank to keep '%s'): ", current_employee->job_title);
+            printf("Enter new age (type %d to keep the same): ", current_employee->age);
+            scanf("%d",&current_employee->age);
+            printf("Enter new salary (type %.2f to keep the same): ", current_employee->salary);
+            scanf("%f",&current_employee->salary);
+            // char new_salary[50];
+            // getchar();
+            // scanf("%s",new_salary);
+            // getchar();
+            // if (strlen(new_salary) > 0)
+            // {
+            //     current_employee->salary = atof(new_salary);
+            // }
+            // scanf("%f",current_employee->salary);
+            printf("Enter new job title (type %s to keep the same): ", current_employee->job_title);
             char new_job_title[50];
             getchar();
             scanf("%[^\n]s",new_job_title);
@@ -224,62 +221,62 @@ void add_queue()
     printf("You can now credit the salary\n");
 
 }
-void credit_salary()
-{
+void credit_salary() {
     if (head == NULL) {
         printf("List is empty.\n");
         return;
     }
-    if(front==-1)
-    {
-        printf("Please update the employee list to credit salary\n");
-        printf("Press 6 to update\n");
+
+    if (front == -1) {
+        printf("Please update the employee list to credit salary first.\n");
+        printf("Press 6 to update the list.\n");
         return;
     }
-    int no;
-    float search_salary;
-    int temp=front;
-    // while(temp!=rear+1)
-    // {
-    //     printf("%d",queue[temp]);
-    //     temp+=1;
-    // }
-    search_salary=dequeue();
-    if(front>=rear+2)
-    {
-        printf("Salary has been creditd to all the employee");
-        return;
-    }
-    printf("------ The salary is credited based on the the employee post------\n");
-    printf("The salary to be credited to the employee is:\n");
-    // printf("%d",top);
-    // printf("%d",rear);
-    // printf("%d",Id_emp);
-    struct employee *search = head;
-    while(search!=NULL)
-    {
-        if(search->salary==search_salary)
-        {
-            printf("ID: %d\n", search->id);
-            printf("Name: %s\n", search->name);
-            printf("Age: %d\n", search->age);
-            printf("Job Title: %s\n",search->job_title);
-            printf("Salary: %.2f\n", search->salary);
-            printf("do you want to credit the salary now \n");
-            printf("if yes 1\n");
-            printf("if later 0 \n");
-            scanf("%d",&no);
-            if(no==1)
-            {
-                printf("The salary has been credited to the employee %s of Ruppes :%.2f\n",search->name,search->salary);
-                return;
+
+    printf("------ Salary Crediting Based on Employee Post ------\n");
+
+    while (front <= rear) {
+        // Get the salary to be credited (dequeue the front element)
+        float current_salary = dequeue();
+
+        int found = 0; // Flag to check if any employee matches the salary
+        struct employee *current = head;
+
+        while (current != NULL) {
+            if (current->salary == current_salary) {
+                found = 1; 
+                printf("\nEmployee Details:\n");
+                printf("ID: %d\n", current->id);
+                printf("Name: %s\n", current->name);
+                printf("Age: %d\n", current->age);
+                printf("Job Title: %s\n", current->job_title);
+                printf("Salary: %.2f\n", current->salary);
+
+                int choice;
+                printf("Do you want to credit the salary now?\n");
+                printf("1. Yes\n");
+                printf("0. No (credit later)\n");
+                printf("Enter your choice: ");
+                scanf("%d", &choice);
+
+                if (choice == 1) {
+                    printf("The salary of Rs. %.2f has been credited to employee %s (ID: %d).\n", current->salary, current->name, current->id);
+                } else {
+                    enqueue(current_salary);
+                    printf("Salary of %.2f will be credited later.\n", current_salary);
+                }
             }
-            else
-            {
-                enqueue(search_salary);
-            }
+            current = current->next;
         }
-        search=search->next;
+
+        if (!found) {
+            printf("No employee found with a salary of %.2f.\n", current_salary);
+        }
+    }
+
+    if (front > rear) {
+        printf("\nAll salaries have been processed.\n");
+        front = rear = -1; 
     }
 }
 void admin()
@@ -342,20 +339,19 @@ void access_admin()
     scanf("%s",user);
     printf("Enter password :");
     scanf("%s",pass);
-    if(strcmp(user,Username) || strcmp(pass,password))
+    if(strcmp(user,Username)==0 && strcmp(pass,password)==0)
     {
-        printf("Acess denied !!\n Invalid Username or Password \n");
-        return;
+        admin();
     }
     else 
     {
-        admin();
+        printf("Acess denied !!\n Invalid Username or Password \n");
+        return;
     }
 
 }
 void emp_view(int id)
 {
-    int temp,flag;
     struct employee *current_employee = head;
     while (current_employee != NULL)
     {
@@ -366,36 +362,34 @@ void emp_view(int id)
             printf("Salary: %.2f\n", current_employee->salary);
             printf("Job Title: %s\n", current_employee->job_title);
             printf("ID: %d\n", current_employee->id);
-            temp=front;
-            while(temp<rear)
+
+            int temp = front;
+            int credited = 0;
+            if(temp==-1)
+                credited=1;
+            while (temp <= rear && temp != -1)
             {
-                if (temp==-1)
+                if (queue[temp] == current_employee->salary)
                 {
-                    flag=1;
-                    goto say;
+                    credited = 1;
+                    break;
                 }
-                else if(queue[temp]!=current_employee->salary)
-                {
-                    flag=0;
-                }
-                temp+=1;
+                temp++;
             }
-            say:
-            if(flag==0)
+            if (credited)
             {
-                printf("Your salary for this month has been credited \n");
-                return;
+                printf("Your salary for this month has NOT been credited yet.\n");
             }
-            else 
+            else
             {
-                printf("Your salary for this month is not been credited yet\n");
-                return;
+                printf("Your salary for this month has been credited.\n");
             }
-    }
-    current_employee = current_employee->next;
+            return;
+        }
+        current_employee = current_employee->next;
     }
     printf("Employee with ID %d not found.\n", id);
-    return ; 
+    return;
 }
 void main()
 {

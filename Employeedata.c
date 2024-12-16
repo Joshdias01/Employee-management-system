@@ -12,6 +12,59 @@ struct employee {
 float queue[50];
 int front=-1,rear=-1;
 struct employee *head = NULL;
+void predefined_employees() {
+    struct employee *new_employee;
+
+    //
+    new_employee = (struct employee *)malloc(sizeof(struct employee));
+    strcpy(new_employee->name, "Alice");
+    new_employee->age = 30;
+    new_employee->salary = 50000;
+    strcpy(new_employee->job_title, "Manager");
+    new_employee->id = 101;
+    new_employee->next = head;
+    head = new_employee;
+
+    // lowest salary
+    new_employee = (struct employee *)malloc(sizeof(struct employee));
+    strcpy(new_employee->name, "Bob");
+    new_employee->age = 25;
+    new_employee->salary = 40000;
+    strcpy(new_employee->job_title, "Engineer");
+    new_employee->id = 102;
+    new_employee->next = head;
+    head = new_employee;
+
+    new_employee = (struct employee *)malloc(sizeof(struct employee));
+    strcpy(new_employee->name, "Charlie");
+    new_employee->age = 35;
+    new_employee->salary = 55000;
+    strcpy(new_employee->job_title, "Team Lead");
+    new_employee->id = 103;
+    new_employee->next = head;
+    head = new_employee;
+
+
+    new_employee = (struct employee *)malloc(sizeof(struct employee));
+    strcpy(new_employee->name, "Diana");
+    new_employee->age = 28;
+    new_employee->salary = 45000;
+    strcpy(new_employee->job_title, "Developer");
+    new_employee->id = 104;
+    new_employee->next = head;
+    head = new_employee;
+
+    //highest salary , first come
+    new_employee = (struct employee *)malloc(sizeof(struct employee));
+    strcpy(new_employee->name, "Eve");
+    new_employee->age = 40;
+    new_employee->salary = 60000;
+    strcpy(new_employee->job_title, "Director");
+    new_employee->id = 105;
+    new_employee->next = head;
+    head = new_employee;
+
+}
 void add_employee() {
     int c;
     struct employee *new_employee = (struct employee *)malloc(sizeof(struct employee));
@@ -180,6 +233,30 @@ float dequeue()
     front+=1;
     return temp;
 }
+int stack[50];
+int top = -1;
+void push(int id) {
+    if (top == 49) {
+        printf("Cannot add more credited salaries.\n");
+        return;
+    }
+    stack[++top] = id;
+}
+int pop() {
+    if (top == -1) {
+        printf("No credited salaries to remove.\n");
+        return -1;
+    }
+    return stack[top--];
+}
+int present_in_stack(int id) {
+    for (int i = 0; i <= top; i++) {
+        if (stack[i] == id) {
+            return 1;
+        }
+    }
+    return 0;
+}
 void sort_queue()
 {
     int temp;
@@ -204,10 +281,6 @@ void sort_queue()
 }
 void add_queue()
 {
-    if (head == NULL) {
-        printf("List is empty.\n");
-        return;
-    }
     float temp;
     struct employee *Id_check = head;
     while(Id_check!=NULL)
@@ -217,34 +290,25 @@ void add_queue()
         Id_check=Id_check->next;
     }
     sort_queue();
-    printf("The employee list is updated\n");
-    printf("You can now credit the salary\n");
+    printf("The employee list is now updated\n");
+    printf("You can now credit the salary press 7 \n");
 
 }
 void credit_salary() {
-    if (head == NULL) {
-        printf("List is empty.\n");
-        return;
-    }
-
     if (front == -1) {
         printf("Please update the employee list to credit salary first.\n");
         printf("Press 6 to update the list.\n");
         return;
     }
 
-    printf("------ Salary Crediting Based on Employee Post ------\n");
+    printf("------ Salary Crediting Based on Employee Post/Employee salary ------\n");
 
     while (front <= rear) {
-        // Get the salary to be credited (dequeue the front element)
         float current_salary = dequeue();
-
-        int found = 0; // Flag to check if any employee matches the salary
         struct employee *current = head;
 
         while (current != NULL) {
             if (current->salary == current_salary) {
-                found = 1; 
                 printf("\nEmployee Details:\n");
                 printf("ID: %d\n", current->id);
                 printf("Name: %s\n", current->name);
@@ -261,19 +325,18 @@ void credit_salary() {
 
                 if (choice == 1) {
                     printf("The salary of Rs. %.2f has been credited to employee %s (ID: %d).\n", current->salary, current->name, current->id);
+                    push(current->id); 
                 } else {
-                    enqueue(current_salary);
+                    enqueue(current_salary); 
                     printf("Salary of %.2f will be credited later.\n", current_salary);
                 }
             }
             current = current->next;
         }
-
-        if (!found) {
-            printf("No employee found with a salary of %.2f.\n", current_salary);
-        }
     }
-
+    // if(front==rear+1){
+    //     front=rear=-1;
+    // }
     if (front > rear) {
         printf("\nAll salaries have been processed.\n");
         front = rear = -1; 
@@ -331,15 +394,21 @@ void admin()
 void access_admin()
 {
     int a;
-    char Username[50],password[50];
+    char Username[50],password[50],Username2[50],password2[50];
     strcpy(Username,"joshua");
     strcpy(password,"josh12");
+    strcpy(Username2,"harshith");
+    strcpy(password2,"harshith12");
     char user[50],pass[50];
     printf("Enter username :");
     scanf("%s",user);
     printf("Enter password :");
     scanf("%s",pass);
     if(strcmp(user,Username)==0 && strcmp(pass,password)==0)
+    {
+        admin();
+    }
+    else if (strcmp(user,Username2)==0 && strcmp(pass,password2)==0)
     {
         admin();
     }
@@ -350,54 +419,39 @@ void access_admin()
     }
 
 }
-void emp_view(int id)
-{
+void emp_view(int id) {
     struct employee *current_employee = head;
-    while (current_employee != NULL)
-    {
-        if (current_employee->id == id)
-        {
+
+    while (current_employee != NULL) {
+        if (current_employee->id == id) {
             printf("Name: %s\n", current_employee->name);
             printf("Age: %d\n", current_employee->age);
             printf("Salary: %.2f\n", current_employee->salary);
             printf("Job Title: %s\n", current_employee->job_title);
             printf("ID: %d\n", current_employee->id);
 
-            int temp = front;
-            int credited = 0;
-            if(temp==-1)
-                credited=1;
-            while (temp <= rear && temp != -1)
-            {
-                if (queue[temp] == current_employee->salary)
-                {
-                    credited = 1;
-                    break;
-                }
-                temp++;
-            }
-            if (credited)
-            {
-                printf("Your salary for this month has NOT been credited yet.\n");
-            }
-            else
-            {
+            //if(//call the stack)
+            if (present_in_stack(id)) {
                 printf("Your salary for this month has been credited.\n");
+            } else {
+                printf("Your salary for this month has NOT been credited yet.\n");
             }
             return;
         }
         current_employee = current_employee->next;
     }
+
     printf("Employee with ID %d not found.\n", id);
     return;
 }
 void main()
 {
+    predefined_employees();
     int choice,emp_id;
     do
     {
         printf("1.ADMIN Login\n");
-        printf("2.EMPLOYEE Login\n");
+        printf("2.EMPLOYEE view\n");
         printf("3.Exit\n");
         printf("Enter your choice : ");
         scanf("%d",&choice);

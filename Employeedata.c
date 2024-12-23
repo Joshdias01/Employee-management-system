@@ -13,12 +13,14 @@ float queue[50];
 int front=-1,rear=-1;
 struct employee *head = NULL;
 void predefined_employees() {
+    //struct employee *emp;
     struct employee *new_employee;
 
-    //
+    //to add (remember)
     new_employee = (struct employee *)malloc(sizeof(struct employee));
-    strcpy(new_employee->name, "Alice");
+    strcpy(new_employee->name, "Chetan");
     new_employee->age = 30;
+    // strcpy(new_employee->salary,"50000");
     new_employee->salary = 50000;
     strcpy(new_employee->job_title, "Manager");
     new_employee->id = 101;
@@ -27,7 +29,7 @@ void predefined_employees() {
 
     // lowest salary
     new_employee = (struct employee *)malloc(sizeof(struct employee));
-    strcpy(new_employee->name, "Bob");
+    strcpy(new_employee->name, "Ankit");
     new_employee->age = 25;
     new_employee->salary = 40000;
     strcpy(new_employee->job_title, "Engineer");
@@ -36,7 +38,7 @@ void predefined_employees() {
     head = new_employee;
 
     new_employee = (struct employee *)malloc(sizeof(struct employee));
-    strcpy(new_employee->name, "Charlie");
+    strcpy(new_employee->name, "Aditya");
     new_employee->age = 35;
     new_employee->salary = 55000;
     strcpy(new_employee->job_title, "Team Lead");

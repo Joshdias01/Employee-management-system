@@ -397,10 +397,10 @@ void access_admin()
 {
     int a;
     char Username[50],password[50],Username2[50],password2[50];
-    strcpy(Username,"joshua");
-    strcpy(password,"josh12");
-    strcpy(Username2,"harshith");
-    strcpy(password2,"harshith12");
+    strcpy(Username,"ram");
+    strcpy(password,"ram12");
+    strcpy(Username2,"rohit");
+    strcpy(password2,"rohit12");
     char user[50],pass[50];
     printf("Enter username :");
     scanf("%s",user);

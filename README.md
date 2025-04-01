@@ -8,3 +8,6 @@ At present there are 2 admins :
 
 2. USERNAME : rohit
    PASSWORD : rohit12
+
+You can also trial run this project directly 
+just download the employee.exe file and run in your system 

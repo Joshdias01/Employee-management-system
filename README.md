@@ -10,4 +10,4 @@ At present there are 2 admins :
    PASSWORD : rohit12
 
 You can also trial run this project directly 
-just download the employee.exe file and run in your system 
+just download the employeeData.exe file and run in your system 
